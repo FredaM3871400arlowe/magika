@@ -34,7 +34,9 @@ class ScoredContentType:
 class ContentTypeScorer:
     """Ranks and filters content type predictions by score."""
 
-    DEFAULT_THRESHOLD: float = 0.5
+    # Raised from 0.5 to 0.6 -- I found too many false positives at 0.5
+    # when testing on my local corpus of mixed documents.
+    DEFAULT_THRESHOLD: float = 0.6
 
     def __init__(self, threshold: float = DEFAULT_THRESHOLD) -> None:
         if not 0.0 <= threshold <= 1.0:
