@@ -51,6 +51,10 @@ class ContentTypeRegistry:
         """Return a sorted list of all registered MIME types."""
         return sorted(self._by_mime_type.keys())
 
+    def all_extensions(self) -> List[str]:
+        """Return a sorted list of all registered file extensions."""
+        return sorted(self._by_extension.keys())
+
     def __len__(self) -> int:
         return len(self._by_label)
 
