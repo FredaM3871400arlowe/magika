@@ -64,6 +64,9 @@ class ContentTypeRegistry:
     def __contains__(self, label: str) -> bool:
         return label in self._by_label
 
+    def __repr__(self) -> str:
+        return f"ContentTypeRegistry({len(self)} content types registered)"
+
     @classmethod
     def from_list(cls, content_types: List[ContentTypeInfo]) -> "ContentTypeRegistry":
         """Build a registry from a list of ContentTypeInfo objects."""
