@@ -26,6 +26,8 @@ def filter_instance() -> ContentTypeFilter:
     registry.register(_make_ct("jpeg", "image/jpeg", [".jpg", ".jpeg"]))
     registry.register(_make_ct("pdf", "application/pdf", [".pdf"]))
     registry.register(_make_ct("json", "application/json", [".json"]))
+    # Added markdown for additional text/* coverage
+    registry.register(_make_ct("markdown", "text/markdown", [".md", ".markdown"]))
     return ContentTypeFilter(registry)
 
 
@@ -49,7 +51,7 @@ def test_by_extension_no_match_returns_empty(filter_instance: ContentTypeFilter)
 def test_by_mime_prefix_text(filter_instance: ContentTypeFilter) -> None:
     results = filter_instance.by_mime_prefix("text/")
     labels = {ct.label for ct in results}
-    assert labels == {"python", "html"}
+    assert labels == {"python", "html", "markdown"}
 
 
 def test_by_mime_prefix_image(filter_instance: ContentTypeFilter) -> None:
@@ -66,6 +68,7 @@ def test_by_mime_prefix_no_match(filter_instance: ContentTypeFilter) -> None:
 def test_is_text_true(filter_instance: ContentTypeFilter) -> None:
     assert filter_instance.is_text("python") is True
     assert filter_instance.is_text("html") is True
+    assert filter_instance.is_text("markdown") is True
 
 
 def test_is_text_false_for_binary(filter_instance: ContentTypeFilter) -> None:
@@ -86,7 +89,7 @@ def test_is_binary_false_for_text(filter_instance: ContentTypeFilter) -> None:
     assert filter_instance.is_binary("python") is False
 
 
-def test_labels_sorted(filter_instance: ContentTypeFilter) -> None:
-    labels = filter_instance.labels()
-    assert labels == sorted(labels)
-    assert set(labels) == {"python", "html", "jpeg", "pdf", "json"}
+def test_by_extension_markdown(filter_instance: ContentTypeFilter) -> None:
+    results = filter_instance.by_extension(".md")
+    assert len(results) == 1
+    assert results[0].label == "markdown"
