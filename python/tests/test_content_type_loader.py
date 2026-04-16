@@ -28,6 +28,14 @@ SAMPLE_CONTENT_TYPES = [
         "description": "JSON data",
         "extensions": [".json"],
     },
+    # Added a third sample to better exercise multi-entry registries
+    {
+        "label": "markdown",
+        "mime_type": "text/markdown",
+        "group": "text",
+        "description": "Markdown document",
+        "extensions": [".md", ".markdown"],
+    },
 ]
 
 
@@ -40,9 +48,9 @@ def sample_json_file(tmp_path: Path) -> Path:
 
 def test_load_content_types_from_json(sample_json_file: Path):
     cts = load_content_types_from_json(sample_json_file)
-    assert len(cts) == 2
+    assert len(cts) == 3
     labels = {ct.label for ct in cts}
-    assert labels == {"python", "json"}
+    assert labels == {"python", "json", "markdown"}
 
 
 def test_load_content_types_preserves_extensions(sample_json_file: Path):
@@ -60,9 +68,10 @@ def test_load_content_types_invalid_json_structure(tmp_path: Path):
 
 def test_build_registry_from_json(sample_json_file: Path):
     registry = build_registry_from_json(sample_json_file)
-    assert len(registry) == 2
+    assert len(registry) == 3
     assert registry.get_by_label("python") is not None
     assert registry.get_by_label("json") is not None
+    assert registry.get_by_label("markdown") is not None
 
 
 def test_build_registry_extension_lookup(sample_json_file: Path):
@@ -77,3 +86,11 @@ def test_build_registry_mime_type_lookup(sample_json_file: Path):
     results = registry.get_by_mime_type("text/x-python")
     assert len(results) == 1
     assert results[0].label == "python"
+
+
+def test_build_registry_multiple_extensions(sample_json_file: Path):
+    # Verify that a content type with multiple extensions is reachable by each one
+    registry = build_registry_from_json(sample_json_file)
+    assert len(registry.get_by_extension(".md")) == 1
+    assert len(registry.get_by_extension(".markdown")) == 1
+    assert registry.get_by_extension(".md")[0].label == "markdown"
