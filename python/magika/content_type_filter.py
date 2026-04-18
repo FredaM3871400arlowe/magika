@@ -50,6 +50,9 @@ class ContentTypeFilter:
 
         Note: types with no registered label are treated as binary (returns False
         rather than raising). This feels safer for unknown inputs.
+
+        TODO: consider returning True for unknown labels instead of False, since
+        unknown content is more likely to be binary than text in practice.
         """
         ct: Optional[ContentTypeInfo] = self._registry.get_by_label(label)
         if ct is None:
