@@ -100,7 +100,6 @@ def test_iter():
 def test_from_list():
     cts = [_make_ct("pdf"), _make_ct("txt"), _make_ct("html")]
     registry = ContentTypeRegistry.from_list(cts)
-    # Verify all content types were registered correctly
     assert len(registry) == 3
     assert registry.get_by_label("pdf") is cts[0]
     assert registry.get_by_label("txt") is cts[1]
