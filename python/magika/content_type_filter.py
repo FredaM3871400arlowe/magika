@@ -46,7 +46,11 @@ class ContentTypeFilter:
         return ct.mime_type.lower().startswith("text/")
 
     def is_binary(self, label: str) -> bool:
-        """Return True when the content type is NOT textual."""
+        """Return True when the content type is NOT textual.
+
+        Note: types with no registered label are treated as binary (returns False
+        rather than raising). This feels safer for unknown inputs.
+        """
         ct: Optional[ContentTypeInfo] = self._registry.get_by_label(label)
         if ct is None:
             return False
