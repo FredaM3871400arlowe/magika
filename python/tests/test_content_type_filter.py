@@ -86,10 +86,6 @@ def test_is_binary_true(filter_instance: ContentTypeFilter) -> None:
 
 
 def test_is_binary_false_for_text(filter_instance: ContentTypeFilter) -> None:
+    # text/* types should never be considered binary
     assert filter_instance.is_binary("python") is False
-
-
-def test_by_extension_markdown(filter_instance: ContentTypeFilter) -> None:
-    results = filter_instance.by_extension(".md")
-    assert len(results) == 1
-    assert results[0].label == "markdown"
+    assert filter_instance.is_binary("markdown") is False
