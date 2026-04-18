@@ -6,23 +6,14 @@
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Unless required by applicable law or agreed to in writing, BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or# limitations under the License.
 
 import pytest
-from magika.content_types import ContentTypeInfo, COMMON_CONTENT_TYPES
+fCONTENT_TYPES
 
-
-def test_content_type_info_creation() -> None:
-    ct = ContentTypeInfo(
-        label="html",
-        mime_type="text/html",
-        group="markup",
-        description="HyperText Markup Language",
-        extensions="],
+_info_creation() -> None:",
+        extensions=[],
         is_text=True,
     )
     assert ct.label == "html"
@@ -31,7 +22,8 @@ def test_content_type_info_creation() -> None:
 
 
 def test_content_type_info_empty_label_raises() -> None:
-    with pytest.raises(ValueError, match="label", group="text", description="Plain text")
+    with pytest.raises(ValueError, match="label"):
+        ContentTypeInfo(label="", mime_type="text/plain", group="text", description="Plain text")
 
 
 def test_content_type_info_empty_mime_type_raises() -> None:
@@ -91,5 +83,4 @@ def test_common_content_types_all_valid() -> None:
         assert ct.label
         assert ct.mime_type
         assert ct.group
-        # Note: checking description instead of the truncated `ct.de` typo in original
         assert ct.description
