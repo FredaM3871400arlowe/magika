@@ -102,3 +102,5 @@ def test_from_list():
     registry = ContentTypeRegistry.from_list(cts)
     assert len(registry) == 3
     assert registry.get_by_label("pdf") is cts[0]
+    assert registry.get_by_label("txt") is cts[1]
+    assert registry.get_by_label("html") is cts[2]
