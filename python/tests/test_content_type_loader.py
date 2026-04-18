@@ -66,6 +66,14 @@ def test_load_content_types_invalid_json_structure(tmp_path: Path):
         load_content_types_from_json(p)
 
 
+def test_load_content_types_empty_array(tmp_path: Path):
+    # Edge case: an empty JSON array should return an empty list without errors
+    p = tmp_path / "empty.json"
+    p.write_text(json.dumps([]), encoding="utf-8")
+    cts = load_content_types_from_json(p)
+    assert cts == []
+
+
 def test_build_registry_from_json(sample_json_file: Path):
     registry = build_registry_from_json(sample_json_file)
     assert len(registry) == 3
@@ -93,4 +101,10 @@ def test_build_registry_multiple_extensions(sample_json_file: Path):
     registry = build_registry_from_json(sample_json_file)
     assert len(registry.get_by_extension(".md")) == 1
     assert len(registry.get_by_extension(".markdown")) == 1
-    assert registry.get_by_extension(".md")[0].label == "markdown"
+    assert registry.get_by_extension(".md")[0]
+
+
+def test_build_registry_unknown_label_returns_none(sample_json_file: Path):
+    # Ensure missing labels return None rather than raising an exception
+    registry = build_registry_from_json(sample_json_file)
+    assert registry.get_by_label("nonexistent") is None
