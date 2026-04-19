@@ -39,8 +39,11 @@ def build_registry_from_json(path: Path) -> ContentTypeRegistry:
 def load_default_registry() -> ContentTypeRegistry:
     """Load the default content type registry bundled with magika.
 
-    Falls back to an empty registry if the default file does not exist.
+    Raises FileNotFoundError if the default file does not exist, rather than
+    silently returning an empty registry which could hide packaging issues.
     """
     if not DEFAULT_CONTENT_TYPES_JSON.exists():
-        return ContentTypeRegistry()
+        raise FileNotFoundError(
+            f"Default content types file not found: {DEFAULT_CONTENT_TYPES_JSON}"
+        )
     return build_registry_from_json(DEFAULT_CONTENT_TYPES_JSON)
