@@ -27,7 +27,15 @@ def load_content_types_from_json(path: Path) -> List[ContentTypeInfo]:
             f"Expected a JSON array at the top level, got {type(raw).__name__}."
         )
 
-    return [ContentTypeInfo.from_dict(entry) for entry in raw]
+    # Skip entries that are missing required fields instead of crashing hard.
+    # Useful when experimenting with partial/custom content_types.json files.
+    results = []
+    for entry in raw:
+        try:
+            results.append(ContentTypeInfo.from_dict(entry))
+        except (KeyError, TypeError, ValueError):
+            pass
+    return results
 
 
 def build_registry_from_json(path: Path) -> ContentTypeRegistry:
