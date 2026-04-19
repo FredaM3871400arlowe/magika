@@ -74,3 +74,28 @@ class ContentTypeRegistry:
         for ct in content_types:
             registry.register(ct)
         return registry
+
+    def unregister(self, label: str) -> None:
+        """Remove a ContentTypeInfo from the registry by label.
+
+        Raises KeyError if the label is not registered.
+        """
+        if label not in self._by_label:
+            raise KeyError(f"No content type with label '{label}' is registered.")
+        ct = self._by_label.pop(label)
+
+        # Clean up mime type index
+        mime_list = self._by_mime_type.get(ct.mime_type, [])
+        if ct in mime_list:
+            mime_list.remove(ct)
+        if not mime_list:
+            self._by_mime_type.pop(ct.mime_type, None)
+
+        # Clean up extension index
+        for ext in ct.extensions:
+            normalized = ext.lstrip(".").lower()
+            ext_list = self._by_extension.get(normalized, [])
+            if ct in ext_list:
+                ext_list.remove(ct)
+            if not ext_list:
+                self._by_extension.pop(normalized, None)
