@@ -64,6 +64,11 @@ class PredictionResult:
         """True when the final prediction meets the confidence threshold."""
         return self.output.is_confident
 
+    @property
+    def was_overridden(self) -> bool:
+        """Alias for `overridden` with a more readable name."""
+        return self.overridden
+
     # ------------------------------------------------------------------
     # Serialisation
     # ------------------------------------------------------------------
