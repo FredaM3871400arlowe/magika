@@ -82,6 +82,12 @@ def test_build_registry_from_json(sample_json_file: Path):
     assert registry.get_by_label("markdown") is not None
 
 
+def test_build_registry_unknown_label_returns_none(sample_json_file: Path):
+    # Personal note: make sure unknown labels don't raise, just return None
+    registry = build_registry_from_json(sample_json_file)
+    assert registry.get_by_label("doesnotexist") is None
+
+
 def test_build_registry_extension_lookup(sample_json_file: Path):
     registry = build_registry_from_json(sample_json_file)
     results = registry.get_by_extension(".json")
@@ -97,14 +103,9 @@ def test_build_registry_mime_type_lookup(sample_json_file: Path):
 
 
 def test_build_registry_multiple_extensions(sample_json_file: Path):
-    # Verify that a content type with multiple extensions is reachable by each one
+    # Verify that both .md and .markdown resolve to the markdown content type
     registry = build_registry_from_json(sample_json_file)
-    assert len(registry.get_by_extension(".md")) == 1
-    assert len(registry.get_by_extension(".markdown")) == 1
-    assert registry.get_by_extension(".md")[0]
-
-
-def test_build_registry_unknown_label_returns_none(sample_json_file: Path):
-    # Ensure missing labels return None rather than raising an exception
-    registry = build_registry_from_json(sample_json_file)
-    assert registry.get_by_label("nonexistent") is None
+    for ext in (".md", ".markdown"):
+        results = registry.get_by_extension(ext)
+        assert len(results) == 1
+        assert results[0].label == "markdown"
