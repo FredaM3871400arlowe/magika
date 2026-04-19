@@ -6,18 +6,11 @@
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or# limitations under the License.
+# Unless required byNTENT_TYPES
 
-import pytest
-fCONTENT_TYPES
-
-_info_creation() -> None:",
-        extensions=[],
-        is_text=True,
-    )
-    assert ct.label == "html"
-    assert ct.mime_type == "text/html"
+_info_creation()n        extensions=[],
+        label == "html"
+    text/html"
     assert ct.is_text is True
 
 
@@ -84,3 +77,10 @@ def test_common_content_types_all_valid() -> None:
         assert ct.mime_type
         assert ct.group
         assert ct.description
+
+
+# Personal note: also verify that no two content types share the same label,
+# since duplicate labels would cause silent lookup bugs.
+def test_common_content_types_unique_labels() -> None:
+    labels = [ct.label for ct in COMMON_CONTENT_TYPES]
+    assert len(labels) == len(set(labels)), "Duplicate labels found in COMMON_CONTENT_TYPES"
