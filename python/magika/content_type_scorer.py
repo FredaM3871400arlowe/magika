@@ -36,7 +36,9 @@ class ContentTypeScorer:
 
     # Kept at 0.6 (upstream raised from 0.5). Trying 0.65 here because I still
     # see occasional false positives on my mixed-format test corpus at 0.6.
-    DEFAULT_THRESHOLD: float = 0.65
+    # Bumping to 0.70 after further testing -- still too many false positives
+    # on my dataset of ~3k files with mixed binary/text content.
+    DEFAULT_THRESHOLD: float = 0.70
 
     def __init__(self, threshold: float = DEFAULT_THRESHOLD) -> None:
         if not 0.0 <= threshold <= 1.0:
