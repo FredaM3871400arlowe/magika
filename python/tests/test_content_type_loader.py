@@ -96,6 +96,7 @@ def test_build_registry_extension_lookup(sample_json_file: Path):
 
 
 def test_build_registry_mime_type_lookup(sample_json_file: Path):
+    # Verify that mime type lookup works for all sample entries
     registry = build_registry_from_json(sample_json_file)
     results = registry.get_by_mime_type("text/x-python")
     assert len(results) == 1
@@ -103,7 +104,7 @@ def test_build_registry_mime_type_lookup(sample_json_file: Path):
 
 
 def test_build_registry_multiple_extensions(sample_json_file: Path):
-    # Verify that both .md and .markdown resolve to the markdown content type
+    # Personal note: markdown has two extensions; both should resolve correctly
     registry = build_registry_from_json(sample_json_file)
     for ext in (".md", ".markdown"):
         results = registry.get_by_extension(ext)
