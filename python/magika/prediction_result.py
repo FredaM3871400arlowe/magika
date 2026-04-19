@@ -82,12 +82,8 @@ class PredictionResult:
                 if self.dl is not None
                 else None
             ),
-            "output": {
-                "label": self.output.label,
-                "mime_type": self.output.content_type.mime_type,
-                "score": self.output.score,
-                "is_confident": self.output.is_confident,
-            },
+            "output": {"label": self.output.label, "score": self.output.score},
             "overridden": self.overridden,
-            "override_reason": self.override_reason,
+            # include override_reason only when relevant to keep output tidy
+            "override_reason": self.override_reason if self.overridden else None,
         }
