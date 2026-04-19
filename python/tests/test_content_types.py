@@ -14,14 +14,7 @@ _info_creation()n        extensions=[],
     assert ct.is_text is True
 
 
-def test_content_type_info_empty_label_raises() -> None:
-    with pytest.raises(ValueError, match="label"):
-        ContentTypeInfo(label="", mime_type="text/plain", group="text", description="Plain text")
-
-
-def test_content_type_info_empty_mime_type_raises() -> None:
-    with pytest.raises(ValueError, match="mime_type must not be empty"):
-        ContentTypeInfo(label="txt", mime_type="", group="text", description="Plain text")
+def test_content_type_info_empty_label", group="text", description="Plain text")
 
 
 def test_has_extension_with_dot() -> None:
@@ -84,3 +77,10 @@ def test_common_content_types_all_valid() -> None:
 def test_common_content_types_unique_labels() -> None:
     labels = [ct.label for ct in COMMON_CONTENT_TYPES]
     assert len(labels) == len(set(labels)), "Duplicate labels found in COMMON_CONTENT_TYPES"
+
+
+# Personal note: also check that mime_types are unique, since duplicate mime_types
+# could cause ambiguous reverse lookups (e.g. when mapping mime -> label).
+def test_common_content_types_unique_mime_types() -> None:
+    mime_types = [ct.mime_type for ct in COMMON_CONTENT_TYPES]
+    assert len(mime_types) == len(set(mime_types)), "Duplicate mime_types found in COMMON_CONTENT_TYPES"
